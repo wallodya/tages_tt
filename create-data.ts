@@ -1,24 +1,7 @@
 import fs from "fs"
-import { mkdir } from "fs/promises"
+import checkDirectory from "./utils/check-dir"
 import RandomStringGenerator from "./utils/random"
 import { INPUT_PATH, MOCK_DATA_AMOUNT, SEPARATOR } from "./constants"
-
-const createOutputDirectory = async (path: string) => {
-    const outDirPath = path.split("/").slice(0, -1).join("/")
-    
-    if (fs.existsSync(outDirPath)) {
-        console.log("> Path exists")
-        return
-    }
-    
-    console.log("> Path does not exists")
-    
-    console.log(`> Creating out directory <${outDirPath}>...`)
-    await mkdir(outDirPath)
-    
-    console.log("> Directory created")
-    return
-}
 
 type CreateDataArgs = {
     path: string,
@@ -41,7 +24,7 @@ const createData = async ({
 	console.log(`>>> Creating test data at "${path}"...`)
 	console.time("create-data")
 
-	await createOutputDirectory(path)
+	await checkDirectory(path)
 
 	const file = fs.createWriteStream(path)
 
