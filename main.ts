@@ -1,4 +1,3 @@
-export const addNumbers = (a: number, b : number): number => {
-    return a + b
+const main = () => {
+    
 }
-console.log("Sum: ", addNumbers(1, 2))

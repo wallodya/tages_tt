@@ -1,6 +1,7 @@
 import fs from "fs"
 import { mkdir } from "fs/promises"
 import RandomStringGenerator from "./utils/random"
+import { INPUT_PATH, MOCK_DATA_AMOUNT, SEPARATOR } from "./constants"
 
 const createOutputDirectory = async (path: string) => {
     const outDirPath = path.split("/").slice(0, -1).join("/")
@@ -56,10 +57,6 @@ const createData = async ({
 	return
 }
 
-const MOCK_DATA_PATH = "./data/input.txt"
-const MOCK_DATA_AMOUNT = 20
-const SEPARATOR = "\n"
-
 const generator = new RandomStringGenerator(4, 10, {
     withSpecialSigns: false,
     withDigits: true,
@@ -68,7 +65,7 @@ const generator = new RandomStringGenerator(4, 10, {
 generator.predefinedStrings = Array(20).fill(null).map((_, i) => String(i))
 
 createData({
-	path: MOCK_DATA_PATH,
+	path: INPUT_PATH,
 	amount: MOCK_DATA_AMOUNT,
 	separator: SEPARATOR,
     generator
