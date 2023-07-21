@@ -22,22 +22,36 @@ const createData = async ({
     generator
 }: CreateDataArgs) => {
 	console.log(`>>> Creating test data at "${path}"...`)
-	console.time("create-data")
+	console.time("||| Time: ")
 
 	await checkDirectory(path)
 
-	const file = fs.createWriteStream(path)
+	const stream = fs.createWriteStream(path)
 
-	for (let i = 0; i < amount; ++i) {
-		const randomString = generator.getRandomString()
-		file.write(randomString + separator)
-	}
+    let i = 0
 
-	file.end()
+    const writeStrings = () => {
+        while (i < amount) {
+            const randomString = generator.getRandomString()
+            const buffer = Buffer.from(randomString + separator, "utf-8")
+            if (!stream.write(buffer)) {
+                break
+            }
+            ++i
+        }
+        if (i >= amount) {
+            stream.close(() => {
+                console.log(">>> Data created.")
+                console.timeEnd("||| Time: ")
+            })
+        }
+    }
 
-	console.timeEnd("create-data")
-	console.log(">>> Data created.")
-	return
+    writeStrings()
+
+    stream.on("drain", () => {
+        writeStrings()
+    })
 }
 
 const generator = new RandomStringGenerator(4, 10, {
@@ -45,7 +59,10 @@ const generator = new RandomStringGenerator(4, 10, {
     withDigits: true,
 })
 
-generator.predefinedStrings = Array(20).fill(null).map((_, i) => String(i))
+generator.predefinedStrings = Array(100).fill(null).map(
+    (_) => (
+        String(Math.round(Math.random() * 100))
+    ))
 
 createData({
 	path: INPUT_PATH,

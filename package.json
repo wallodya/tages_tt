@@ -5,10 +5,11 @@
   "description": "",
   "main": "main.ts",
   "scripts": {
-    "test": "jest",
+    "test": "TEST=true jest",
     "start": "node --loader ts-node/esm main.ts",
+    "start-bench": " DEBUG=true node --loader ts-node/esm main.ts",
     "create": "node --loader ts-node/esm create-data.ts"
-  },
+  },    
   "keywords": [],
   "author": "",
   "license": "ISC",

@@ -5,7 +5,6 @@ const checkDirectory = async (path: string) => {
     const outDirPath = path.split("/").slice(0, -1).join("/")
     
     if (fs.existsSync(outDirPath)) {
-        console.log("> Path exists")
         return
     }
     

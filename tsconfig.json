@@ -3,6 +3,7 @@
 		"esModuleInterop": true,
         "module": "ESNext",
         "moduleResolution": "Node",
+        "experimentalDecorators": true
 	},
 	"ts-node": {
 		"esm": true,
