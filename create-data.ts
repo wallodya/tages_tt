@@ -1,7 +1,7 @@
 import fs from "fs"
 import checkDirectory from "./utils/check-dir"
 import RandomStringGenerator from "./utils/random"
-import { INPUT_PATH, MOCK_DATA_AMOUNT, SEPARATOR } from "./constants"
+import { INPUT_PATH, MOCK_DATA_AMOUNT, SEPARATOR_IN } from "./constants"
 
 type CreateDataArgs = {
     path: string,
@@ -67,6 +67,6 @@ generator.predefinedStrings = Array(100).fill(null).map(
 createData({
 	path: INPUT_PATH,
 	amount: MOCK_DATA_AMOUNT,
-	separator: SEPARATOR,
+	separator: SEPARATOR_IN,
     generator
 })

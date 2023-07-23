@@ -1,9 +1,9 @@
 import fs from "fs"
 import { pipeline } from "stream/promises"
-import { INPUT_PATH, OUTPUT_PATH, SEPARATOR } from "../constants"
+import { INPUT_PATH, OUTPUT_PATH } from "../constants"
 import checkDirectory from "../utils/check-dir"
 import { InputError } from "../utils/errors"
-import { MergeChunkProcessor } from "../stream/merge-chunk"
+import { MergeChunkProcessor } from "../stream/merge-processor"
 import SortChunkProcessor from "../stream/sort-chunk"
 
 const sortData = async () => {
@@ -17,25 +17,18 @@ const sortData = async () => {
     const output = fs.createWriteStream(OUTPUT_PATH, { encoding: "utf-8" })
 
     const sortChunkProcessor = new SortChunkProcessor()
-    // const sortChunkPipe = async function* (source: AsyncIterable<Buffer>) {
-    //     sortChunkProcessor.pipe(source)
-    // }
-
     const mergeChunkProcessor = new MergeChunkProcessor()
-    // const mergeChunkPipe = async function* (source: AsyncIterable<string[]>) {
-	// 	mergeChunkProcessor.pipe(source)
-	// }
 
 
     await pipeline([
         input,
         sortChunkProcessor,
-        mergeChunkProcessor,
-        // output
+        mergeChunkProcessor
     ])
-
     input.close()
     output.close()
+
+    return
 }
 
 export default sortData

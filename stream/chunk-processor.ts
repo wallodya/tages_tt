@@ -1,13 +1,13 @@
-import { SEPARATOR } from "../constants"
-import { Transform, TransformCallback } from "stream"
+import { Transform, TransformCallback, TransformOptions } from "stream"
+import { SEPARATOR_IN } from "../constants"
 
-class SortChunkProcessor extends Transform {
+abstract class ChunkProcessor extends Transform {
 	tail: string
-	separator: string
-	constructor(...superArgs: any[]) {
-		super({ objectMode: true, ...superArgs })
+	inputSeparator: string
+	constructor(streamOptions: TransformOptions) {
+		super({ ...streamOptions })
 		this.tail = ""
-		this.separator = SEPARATOR
+		this.inputSeparator = SEPARATOR_IN
 	}
 
 	async _transform(
@@ -18,40 +18,39 @@ class SortChunkProcessor extends Transform {
 		const strings = this.getStrings(chunk)
 
 		if (strings.length > 0) {
-            const result = await this.handleChunk(strings)
-            this.passToCallback(result, callback)
-            return
+			const result = await this.handleChunk(strings)
+			this.passToCallback(result, callback)
+			return
 		}
 
-		if (this.tail.length > 0) {
-			this.passToCallback([this.tail], callback)
-            return
-		}
-	}
-
-    passToCallback(strings: string[], cb: TransformCallback) {
-        cb(null, strings)
+		// if (this.tail.length > 0) {
+		// 	this.passToCallback([this.tail], callback)
+		//     return
+		// }
+        this.passToCallback([], callback)
         return
-    }
+	}
 
 	getStrings(chunk: Buffer) {
 		let chunkString = chunk.toString("utf-8")
-
+        console.log(">>> chunkstring: ", chunkString.length)
 		if (this.tail.length) {
 			chunkString = this.tail + chunkString
 		}
 
-		const strings = chunkString.split(SEPARATOR)
+		const strings = chunkString.split(this.inputSeparator)
 
 		this.tail = strings.pop() ?? ""
 
 		return strings
 	}
 
-	async handleChunk(chunkStrings: string[]) {
-        chunkStrings.sort()
-		return chunkStrings
-	}
+	abstract handleChunk(strings: string[]): unknown
+
+	abstract passToCallback(
+		result: ReturnType<typeof this.handleChunk>,
+		callback: TransformCallback
+	): void
 }
 
-export default SortChunkProcessor
+export default ChunkProcessor

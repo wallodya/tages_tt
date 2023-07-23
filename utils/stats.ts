@@ -19,6 +19,7 @@ const withStats = (fn: (...args: any[]) => any | Promise<any>, ...args: any[]) =
         }
 
         setTimeout(updatePeakRSS, 200)
+        return
     }
     
     return async () => {
