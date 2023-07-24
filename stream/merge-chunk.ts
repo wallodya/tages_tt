@@ -19,14 +19,11 @@ class MergeStream extends ChunkProcessor {
 		this.stringIndex = 0
 	}
 
-	passToCallback(strings: string[], cb: TransformCallback): void {
-		console.log(">>> Passing to callback")
-		cb(null, strings.join(this.outputSeparator) + this.outputSeparator)
-		return
-	}
+    prepareOutput(outRaw: string[]): string {
+        return outRaw.join(this.outputSeparator) + this.outputSeparator
+    }
 
 	async handleChunk(chunkStrings: string[]): Promise<string[]> {
-		console.log(">>> Merging chunk")
 
 		if (
 			this.stringsToMerge.length === 0 ||

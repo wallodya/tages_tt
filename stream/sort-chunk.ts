@@ -6,17 +6,8 @@ class SortChunkProcessor extends ChunkProcessor {
 		super({ objectMode: true, ...superArgs })
 	}
 
-    // _final(callback: (error?: Error) => void): void {
-    //     if (this.tail.length > 0) {
-	// 		console.log("||| Unprocessed tail: ", this.tail)
-    //         return
-	// 	}
-    //     callback(null)
-    // }
-
-    passToCallback(strings: string[], cb: TransformCallback) {
-        cb(null, strings)
-        return
+    prepareOutput(outRaw: string[]): string[] {
+        return outRaw
     }
 
 	async handleChunk(chunkStrings: string[]) {

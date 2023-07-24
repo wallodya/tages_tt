@@ -4,7 +4,7 @@ import { SEPARATOR_IN } from "../constants"
 abstract class ChunkProcessor extends Transform {
 	tail: string
 	inputSeparator: string
-	constructor(streamOptions: TransformOptions) {
+	constructor(streamOptions?: TransformOptions) {
 		super({ ...streamOptions })
 		this.tail = ""
 		this.inputSeparator = SEPARATOR_IN
@@ -19,21 +19,26 @@ abstract class ChunkProcessor extends Transform {
 
 		if (strings.length > 0) {
 			const result = await this.handleChunk(strings)
-			this.passToCallback(result, callback)
+            callback(null, this.prepareOutput(result))
 			return
 		}
 
-		// if (this.tail.length > 0) {
-		// 	this.passToCallback([this.tail], callback)
-		//     return
-		// }
-        this.passToCallback([], callback)
+        callback(null, this.prepareOutput(strings))
         return
 	}
 
+    _final(callback: (error?: Error) => void): void {
+
+        if (this.tail.length > 0) {
+            this.push(this.prepareOutput([this.tail]))
+        }
+
+        callback(null)
+    }
+
 	getStrings(chunk: Buffer) {
 		let chunkString = chunk.toString("utf-8")
-        console.log(">>> chunkstring: ", chunkString.length)
+
 		if (this.tail.length) {
 			chunkString = this.tail + chunkString
 		}
@@ -47,10 +52,8 @@ abstract class ChunkProcessor extends Transform {
 
 	abstract handleChunk(strings: string[]): unknown
 
-	abstract passToCallback(
-		result: ReturnType<typeof this.handleChunk>,
-		callback: TransformCallback
-	): void
+    abstract prepareOutput(outRaw: ReturnType<typeof this.handleChunk>): unknown
+
 }
 
 export default ChunkProcessor

@@ -78,7 +78,7 @@ export class MergeChunkProcessor extends Transform {
         return
     }
 
-    handleRemainingStrings() {
+    private handleRemainingStrings() {
         if (
 			this.mergePipe &&
 			this.mergePipe.stringIndex < this.mergePipe.stringsToMerge.length
@@ -91,23 +91,23 @@ export class MergeChunkProcessor extends Transform {
         }
     }
 
-    getPreviousTempHandle() {
+    private getPreviousTempHandle() {
         const tempFileName = this.fileNameBuilder.getName(this.chunkIndex - 1)
         return createReadStream(tempFileName)
     }
 
-    getNextTempHandle() {
+    private getNextTempHandle() {
         const newTempFileName = this.fileNameBuilder.getName(this.chunkIndex)
         return createWriteStream(newTempFileName)
     }
 
-    async removePreviousTempFile() {
+    private async removePreviousTempFile() {
         const tempName = this.fileNameBuilder.getName(this.chunkIndex - 1)
         await fs.rm(tempName)
         return
     }
 
-    async renameTempFile() {
+    private async renameTempFile() {
         const tempFileName = this.fileNameBuilder.getName(this.chunkIndex - 1)
         await fs.rename(tempFileName, this.outputPath)
         return
