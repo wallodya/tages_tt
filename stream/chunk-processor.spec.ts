@@ -2,6 +2,7 @@ import StreamTest from "streamtest"
 
 import { TransformCallback } from "stream"
 import ChunkProcessor from "./chunk-processor"
+import createTestPipeline from "../utils/test-pipeline"
 
 class TestChunkProcessor extends ChunkProcessor {
     constructor() {
@@ -15,23 +16,21 @@ class TestChunkProcessor extends ChunkProcessor {
     prepareOutput(outRaw: string[]): string[] {
         return outRaw
     }
-
-    // passToCallback(result: string[], callback: TransformCallback) {
-    //     callback(null, result)
-    // }
 }
 
-const getResultChunks = async (inputChunks: string[]) => {
-    const processor = new TestChunkProcessor()
+// const getResultChunks = async (inputChunks: string[]) => {
+//     const processor = new TestChunkProcessor()
 
-    return new Promise<string[]>((resolve, reject) => {
-        StreamTest.v2.fromChunks(inputChunks)
-            .pipe(processor)
-            .pipe(StreamTest.v2.toObjects((err, chunks: string[]) => {
-                resolve(chunks)
-            }))
-    })
-}
+//     return new Promise<string[]>((resolve, reject) => {
+//         StreamTest.v2.fromChunks(inputChunks)
+//             .pipe(processor)
+//             .pipe(StreamTest.v2.toObjects((err, chunks: string[]) => {
+//                 resolve(chunks)
+//             }))
+//     })
+// }
+
+const getResultChunks = createTestPipeline(TestChunkProcessor)
 
 describe("ChunkProcessor getStrings method", () => {
     test("should manage empty chunk", () => {

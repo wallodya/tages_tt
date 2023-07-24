@@ -14,6 +14,10 @@ class SortChunkProcessor extends ChunkProcessor {
         chunkStrings.sort()
 		return chunkStrings
 	}
+
+    static sortStrings(arr: string[]) {
+        return arr
+    }
 }
 
 export default SortChunkProcessor

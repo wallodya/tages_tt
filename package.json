@@ -7,6 +7,7 @@
   "scripts": {
     "test": "TEST=true jest",
     "start": "node --loader ts-node/esm main.ts",
+    "check": "node --loader ts-node/esm ./test/check-file.ts",
     "start-bench": " DEBUG=true node --loader ts-node/esm main.ts",
     "create": "node --loader ts-node/esm create-data.ts"
   },

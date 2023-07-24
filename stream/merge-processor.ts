@@ -43,7 +43,6 @@ export class MergeChunkProcessor extends Transform {
     }
 
     async handleChunk(chunkStrings: string[]) {
-        console.log(`>>> Handling chunk ${this.chunkIndex}. Length: ${chunkStrings.length}`);
         
         if (this.chunkIndex === 0) {
             await this.handleFirstChunk(chunkStrings)
@@ -54,13 +53,11 @@ export class MergeChunkProcessor extends Transform {
         this.writeHandle = this.getNextTempHandle()
         this.mergePipe = new MergeStream(chunkStrings)
 
-        console.log("Test1")
         await pipeline([
             this.readHandle,
             this.mergePipe,
             this.writeHandle
         ])
-        console.log("Test2")
 
         this.handleRemainingStrings()
 
@@ -71,7 +68,6 @@ export class MergeChunkProcessor extends Transform {
     }
 
     async handleFirstChunk(chunkStrings: string[]) {
-        console.log(">> First chunk")
         this.writeHandle = this.getNextTempHandle()
         this.writeHandle.write(chunkStrings.join(this.outputSeparator))
         this.writeHandle.close()
