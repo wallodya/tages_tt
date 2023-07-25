@@ -1,6 +1,19 @@
 import { SEPARATOR_OUT } from "../constants"
 import ChunkProcessor from "./chunk-processor"
 
+
+/**
+ * Inherits from ChunkProcessor, used to merge sorted chunk
+ * with chunks which were previously sorted and saved to a temp file. 
+ * New chunk is passed to a constructor stored as a parameter.
+ * @date 25/07/2023 - 18:37:28
+ *
+ * @param {string[]} srtings Strings that need to be merged into previously sorted strings.
+ * 
+ * @class MergeStream
+ * @type {MergeStream}
+ * @extends {ChunkProcessor}
+ */
 class MergeStream extends ChunkProcessor {
 	stringsToMerge: string[]
 	first: boolean

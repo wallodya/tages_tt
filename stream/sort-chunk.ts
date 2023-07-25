@@ -1,6 +1,16 @@
 import { TransformCallback } from "stream"
 import ChunkProcessor from "./chunk-processor"
 
+
+/**
+ * Inherits from ChunkProcessor and adds sotring logic to it.
+ * Passes chunk as an array of sorted strings to a next stream in a pipeline
+ * @date 25/07/2023 - 18:36:05
+ *
+ * @class SortChunkProcessor
+ * @type {SortChunkProcessor}
+ * @extends {ChunkProcessor}
+ */
 class SortChunkProcessor extends ChunkProcessor {
     itemsCount: number
 	constructor(...superArgs: any[]) {

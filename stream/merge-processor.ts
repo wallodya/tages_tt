@@ -7,6 +7,21 @@ import { OUTPUT_PATH, SEPARATOR_OUT } from "../constants"
 import FileNameBuilder from "../utils/file-name-builder"
 import MergeStream from "./merge-chunk"
 
+
+/**
+ * Transform stream that handles temp files and chunk merging.
+ * Inherits directly from Transform class (not ChunkProcessor).
+ * Recieves sorted chunks from previous ChunkProcessor as arrays of strings.
+ * Creates new temp file each time chunks is merged with previos ones
+ * and removes temp files which no longer needed.
+ * For merging creates stream pipeline inside handleChunk method
+ * @date 25/07/2023 - 18:42:30
+ *
+ * @export
+ * @class MergeChunkProcessor
+ * @type {MergeChunkProcessor}
+ * @extends {Transform}
+ */
 export class MergeChunkProcessor extends Transform {
     fileNameBuilder: FileNameBuilder
     chunkIndex: number
