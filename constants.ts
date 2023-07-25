@@ -13,5 +13,5 @@ export const MOCK_DATA_AMOUNT = 1e5
 // Otherwise will have to insert this variable in every test string/chunk
 // or change it before running tests
 export const SEPARATOR_TEST = " "
-export const SEPARATOR_IN = process.env["TEST"] === "true" ? SEPARATOR_TEST : " "
+export const SEPARATOR_IN = process.env["TEST"] === "true" ? SEPARATOR_TEST : "\n"
 export const SEPARATOR_OUT = process.env["TEST"] === "true" ? SEPARATOR_TEST : "\n"

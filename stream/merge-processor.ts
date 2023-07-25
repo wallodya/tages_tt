@@ -15,15 +15,19 @@ export class MergeChunkProcessor extends Transform {
     mergePipe: MergeStream
     readHandle: ReturnType<typeof createReadStream>
     writeHandle: ReturnType<typeof createWriteStream>
+
+    itemsCount: number
     constructor() {
         super({ objectMode: true })
         this.fileNameBuilder = new FileNameBuilder()
         this.chunkIndex = 0
         this.outputSeparator = SEPARATOR_OUT
         this.outputPath = OUTPUT_PATH
+        this.itemsCount = 0
     }
 
     async _transform(chunk: string[], encoding: BufferEncoding, callback: TransformCallback) {        
+        this.itemsCount += chunk.length
         await this.handleChunk(chunk)
         ++this.chunkIndex
         callback(null)
@@ -31,6 +35,8 @@ export class MergeChunkProcessor extends Transform {
     }
 
     async _final(callback: (error?: Error) => void) {
+        console.log(">>> Items merged: ", this.itemsCount);
+        
         try {
             await this.renameTempFile()
         } catch (err) {
@@ -59,8 +65,6 @@ export class MergeChunkProcessor extends Transform {
             this.writeHandle
         ])
 
-        this.handleRemainingStrings()
-
 		this.readHandle.close()
         this.writeHandle.close()
 
@@ -69,22 +73,9 @@ export class MergeChunkProcessor extends Transform {
 
     async handleFirstChunk(chunkStrings: string[]) {
         this.writeHandle = this.getNextTempHandle()
-        this.writeHandle.write(chunkStrings.join(this.outputSeparator))
+        this.writeHandle.write(chunkStrings.join(this.outputSeparator) + this.outputSeparator)
         this.writeHandle.close()
         return
-    }
-
-    private handleRemainingStrings() {
-        if (
-			this.mergePipe &&
-			this.mergePipe.stringIndex < this.mergePipe.stringsToMerge.length
-		) {
-            this.writeHandle.write(
-				this.mergePipe.stringsToMerge
-					.slice(this.mergePipe.stringIndex)
-					.join(this.outputSeparator) + this.outputSeparator
-			)
-        }
     }
 
     private getPreviousTempHandle() {

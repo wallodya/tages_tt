@@ -1,4 +1,3 @@
-import { TransformCallback } from "stream"
 import { SEPARATOR_OUT } from "../constants"
 import ChunkProcessor from "./chunk-processor"
 
@@ -19,11 +18,19 @@ class MergeStream extends ChunkProcessor {
 		this.stringIndex = 0
 	}
 
+    _final(callback: (error?: Error) => void): void {
+
+        this.handleReaminingTail()
+        this.handleRemainingStrings()
+
+        callback(null)
+    }
+
     prepareOutput(outRaw: string[]): string {
         return outRaw.join(this.outputSeparator) + this.outputSeparator
     }
 
-	async handleChunk(chunkStrings: string[]): Promise<string[]> {
+	handleChunk(chunkStrings: string[]): string[] {
 
 		if (
 			this.stringsToMerge.length === 0 ||
@@ -65,6 +72,24 @@ class MergeStream extends ChunkProcessor {
 
 		return chunkStrings
 	}
+
+    private handleReaminingTail() {
+        if (this.tail.length > 0) {
+            this.push(
+                this.prepareOutput(this.handleChunk([this.tail]))
+            )
+        }
+        return
+    }
+
+    private handleRemainingStrings() {
+        if (this.stringIndex < this.stringsToMerge.length) {
+            this.push(
+				this.prepareOutput(this.stringsToMerge.slice(this.stringIndex))
+			)
+        }
+        return
+    }
 }
 
 export default MergeStream

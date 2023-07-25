@@ -1,7 +1,8 @@
 import StreamTest from "streamtest"
 import { Transform } from "stream"
 
-const createTestPipeline = (Stream: any) => {
+const createTestPipeline = (Stream: any, ...args: any[]) => {
+    
     return async (inputChunks: string[]) => {
         const processor = new Stream()
     

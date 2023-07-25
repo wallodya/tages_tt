@@ -14,15 +14,24 @@ class CheckSortedProcessor extends ChunkProcessor {
     chunkStart: string
     chunkEnd: string
     chunkIndex: number
+    itemCount: number
 
     constructor() {
         super({objectMode: true})
         this.inputSeparator = SEPARATOR_OUT
         this.chunkIndex = 0
+        this.itemCount = 0
+    }
+
+    _final(callback: (error?: Error) => void): void {
+        this.push(`||| Items checked: ${this.itemCount}`)
+        callback(null)
     }
 
     handleChunk(strings: string[]): string {
         const chunkErrors = CheckSortedProcessor.checkSorted(strings)
+
+        this.itemCount += strings.length
 
         if (chunkErrors.length === 0) {
             ++this.chunkIndex
