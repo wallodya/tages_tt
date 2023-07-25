@@ -1,6 +1,15 @@
 import { formatBytes } from "./format"
 
-const withStats = (fn: (...args: any[]) => any | Promise<any>, ...args: any[]) => {
+
+/**
+ * Adds benchmarking functionality to a functions
+ * Currently only mesaures peak RSS and time a function was running
+ * @date 25/07/2023 - 18:12:21
+ *
+ * @param fn Function to wrap
+ * @returns Wrapped function
+ */
+const withStats = (fn: (...args: any[]) => any | Promise<any>) => {
 
     let finished = false
     let peakRSS = 0
@@ -22,7 +31,7 @@ const withStats = (fn: (...args: any[]) => any | Promise<any>, ...args: any[]) =
         return
     }
     
-    return async () => {
+    return async (...args: any[]) => {
         console.time("||| Time: ")
         updatePeakRSS()
         await fn(...args)

@@ -7,6 +7,25 @@ export type RandomStringGeneratorOptions = Partial<{
     separator: string
 }>
 
+
+/**
+ * Class for generating random strings.
+ * Generated string can be configured by providing options to a constructor
+ * or by using "generatorOptions" setter
+ * 
+ * @date 25/07/2023 - 18:19:31
+ *
+ * @param {number} minLength Minimal length of generated srtings.
+ * @param {number} maxLength Maximal length of generated strings.
+ * @param {RandomStringGeneratorOptions} options Generator options
+ * @param {boolean} options.withLetters Whether to use letters (latin) when genearting strings
+ * @param {boolean} options.withDigits Whether to use digits (0-9) when generating strings
+ * @param {boolean} options.withSpecialSigns Whether to use special signs (.,;:/()[]{}@$#&*<>\"'%`~) when generating strings.
+ * @param {string} options.separator Character to separate generated strings with.
+ * 
+ * @class RandomStringGenerator
+ * @type {RandomStringGenerator}
+ */
 class RandomStringGenerator {
 	private alphabet: string
 	private digits: string
@@ -44,7 +63,15 @@ class RandomStringGenerator {
 		this.predefined = null
 	}
 
-	getRandomString() {
+    
+	/**
+     * Generate random string (with options configured options).
+     * If predefined strings were specified one of those will be returned
+     * @date 25/07/2023 - 18:24:05
+     *
+     * @returns {string} Random string
+     */
+    getRandomString(): string {
 		if (this.predefined && this.predefined.length > 0) {
 			return this.getPredefinedString()
 		}
@@ -98,7 +125,15 @@ class RandomStringGenerator {
         return
     }
 
-	private getPredefinedString() {
+    
+	/**
+     * Get random string from list of predifined srtings
+     * @date 25/07/2023 - 18:22:59
+     *
+     * @private
+     * @returns {string} Random string from predefined list
+     */
+    private getPredefinedString(): string {
 		if (!this.predefined) {
 			throw new Error("No strings were predefined")
 		}
