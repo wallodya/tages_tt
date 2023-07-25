@@ -15,15 +15,22 @@ class CheckSortedProcessor extends ChunkProcessor {
     chunkEnd: string
     chunkIndex: number
     itemCount: number
+    errorsCount: number
 
     constructor() {
         super({objectMode: true})
         this.inputSeparator = SEPARATOR_OUT
         this.chunkIndex = 0
         this.itemCount = 0
+        this.errorsCount = 0
     }
 
     _final(callback: (error?: Error) => void): void {
+        if (this.errorsCount === 0) {
+            this.push(`|||\tNo errors found, file is sorted properly\n`)
+        } else {
+            this.push(`|||\tFound ${this.errorsCount} errors\n`)
+        }
         this.push(`||| Items checked: ${this.itemCount}`)
         callback(null)
     }
@@ -35,9 +42,9 @@ class CheckSortedProcessor extends ChunkProcessor {
 
         if (chunkErrors.length === 0) {
             ++this.chunkIndex
-            return this.getChunkSuccessString()
+            return ""
         }
-
+        this.errorsCount += chunkErrors.length
         const errorMessages = chunkErrors.map(e => this.getErrorInfoString(e))
         ++this.chunkIndex
         return this.wrapChunkErrorMessages(errorMessages)
