@@ -62,65 +62,69 @@ describe("SortChunkProcessor", () => {
     })
 })
 
-// describe("SortChunkProcessor, sorting", () => {
+describe("SortChunkProcessor, sorting", () => {
 
-//     test("should sort array with single item", () => {
-//         const result = SortChunkProcessor.sortStrings(["a"])
+    test("should sort array with single item", () => {
+        const result = SortChunkProcessor.sortStrings(["a"])
 
-//         expect(result).toEqual(["a"])
-//     })
+        expect(result).toEqual(["a"])
+    })
 
-//     test("should arr with multiple letters", () => {
-//         const result = SortChunkProcessor.sortStrings(["b", "a", "c", "g", "d"])
+    test("should arr with multiple letters", () => {
+        const result = SortChunkProcessor.sortStrings(["b", "a", "c", "g", "d"])
 
-//         expect(result).toEqual(["a", "b", "c", "d", "g"])
-//     })
+        expect(result).toEqual(["a", "b", "c", "d", "g"])
+    })
 
-//     test("should arr with multiple numbers", () => {
-//         const result = SortChunkProcessor.sortStrings(["9", "5", "4", "1", "3", "6", "8", "7"])
+    test("should sort arr with multiple numbers", () => {
+        const result = SortChunkProcessor.sortStrings(["9", "5", "4", "1", "3", "6", "8", "7"])
 
-//         expect(result).toEqual(["1", "3", "4", "5", "6", "7", "8", "9"])
-//     })
-// })
+        expect(result).toEqual(["1", "3", "4", "5", "6", "7", "8", "9"])
+    })
+})
 
-// describe("SortChunkProcessor, sorting, random tests", () => {
+describe("SortChunkProcessor, sorting, random tests", () => {
+    const TEST_AMOUNT = 20
+    const SEPARATOR = SEPARATOR_TEST
+
+    const dataCreator = new MockDataCreator({
+        separator: SEPARATOR,
+        minLength: 10,
+        maxLength: 20
+    })
+
+    for (let i = 0; i < TEST_AMOUNT; ++i) {
+        test(`random sorting test ${i}`, () => {
+            const data = dataCreator.createArray(40)
+            const result = SortChunkProcessor.sortStrings(data)
+    
+            data.sort()
+            expect(result).toEqual(data)
+        })
+    }
+})
+
+// describe("SortChunkProcessor, random tests", () => {
 //     const TEST_AMOUNT = 20
 //     const SEPARATOR = SEPARATOR_TEST
+
+//     const formatReturnedResult = (res: string[][], sep: string) => {
+//         return res.flat().join(sep)
+//     }
 
 //     const dataCreator = new MockDataCreator({
 //         separator: SEPARATOR,
 //     })
 
 //     for (let i = 0; i < TEST_AMOUNT; ++i) {
-//         const data = dataCreator.createArray(10)
-//         const result = SortChunkProcessor.sortStrings(data)
 
-//         data.sort()
-//         expect(result).toEqual(data)
+//         test(`random test ${i}, should not loose any data`, async () => {
+//             const { chunks: inputChunks, data} = dataCreator.createDataChunks(100, 8)
+
+//             const resultChunks = await getResultChunks(inputChunks)
+//             const result = formatReturnedResult(resultChunks, SEPARATOR)
+
+//             expect(result).toHaveLength(data.length)
+//         })
 //     }
 // })
-
-describe("SortChunkProcessor, random tests", () => {
-    const TEST_AMOUNT = 20
-    const SEPARATOR = SEPARATOR_TEST
-
-    const formatReturnedResult = (res: string[][], sep: string) => {
-        return res.flat().join(sep)
-    }
-
-    const dataCreator = new MockDataCreator({
-        separator: SEPARATOR,
-    })
-
-    for (let i = 0; i < TEST_AMOUNT; ++i) {
-
-        test(`random test ${i}, should not loose any data`, async () => {
-            const { chunks: inputChunks, data} = dataCreator.createDataChunks(100, 8)
-
-            const resultChunks = await getResultChunks(inputChunks)
-            const result = formatReturnedResult(resultChunks, SEPARATOR)
-
-            expect(result).toHaveLength(data.length)
-        })
-    }
-})
