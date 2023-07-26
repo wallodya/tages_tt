@@ -50,8 +50,6 @@ export class MergeChunkProcessor extends Transform {
     }
 
     async _final(callback: (error?: Error) => void) {
-        console.log(">>> Items merged: ", this.itemsCount);
-        
         try {
             await this.renameTempFile()
         } catch (err) {

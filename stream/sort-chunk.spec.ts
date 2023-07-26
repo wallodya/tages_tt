@@ -104,27 +104,27 @@ describe("SortChunkProcessor, sorting, random tests", () => {
     }
 })
 
-// describe("SortChunkProcessor, random tests", () => {
-//     const TEST_AMOUNT = 20
-//     const SEPARATOR = SEPARATOR_TEST
+describe("SortChunkProcessor, random tests", () => {
+    const TEST_AMOUNT = 20
+    const SEPARATOR = SEPARATOR_TEST
 
-//     const formatReturnedResult = (res: string[][], sep: string) => {
-//         return res.flat().join(sep)
-//     }
+    const formatReturnedResult = (res: string[][], sep: string) => {
+        return res.flat().join(sep)
+    }
 
-//     const dataCreator = new MockDataCreator({
-//         separator: SEPARATOR,
-//     })
+    const dataCreator = new MockDataCreator({
+        separator: SEPARATOR,
+    })
 
-//     for (let i = 0; i < TEST_AMOUNT; ++i) {
+    for (let i = 0; i < TEST_AMOUNT; ++i) {
 
-//         test(`random test ${i}, should not loose any data`, async () => {
-//             const { chunks: inputChunks, data} = dataCreator.createDataChunks(100, 8)
+        test(`random test ${i}, should not loose any data`, async () => {
+            const { chunks: inputChunks, data} = dataCreator.createDataChunks(100, 8)
 
-//             const resultChunks = await getResultChunks(inputChunks)
-//             const result = formatReturnedResult(resultChunks, SEPARATOR)
+            const resultChunks = await getResultChunks(inputChunks)
+            const result = formatReturnedResult(resultChunks, SEPARATOR)
 
-//             expect(result).toHaveLength(data.length)
-//         })
-//     }
-// })
+            expect(result).toHaveLength(data.length)
+        })
+    }
+})

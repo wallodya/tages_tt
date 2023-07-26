@@ -27,7 +27,7 @@ type MockDataCreatorOptions = Partial<{
  * with these strings instead of generating random ones.
  * @param {boolean} withLetters Whether to use letters (latin) when genearting strings
  * @param {boolean} withDigits Whether to use digits (0-9) when generating strings
- * @param {boolean} withSpecialSigns Whether to use special signs (.,;:/()[]{}@$#&*<>\"'%`~) when generating strings
+ * @param {boolean} withSpecialSigns Whether to use special signs (.,;:/()[]{}@$#&*<>\"'%`~) when generating strings.
  * 
  * @class MockDataCreator
  * @type {MockDataCreator}
